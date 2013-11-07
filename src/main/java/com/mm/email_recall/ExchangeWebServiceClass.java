@@ -1,6 +1,9 @@
 package com.mm.email_recall;
 
+import java.io.FileInputStream;
 import java.net.URI;
+import java.util.Properties;
+
 import microsoft.exchange.webservices.data.Appointment;
 import microsoft.exchange.webservices.data.ConnectingIdType;
 import microsoft.exchange.webservices.data.EmailMessage;
@@ -14,11 +17,18 @@ import microsoft.exchange.webservices.data.FindItemsResults;
 
 public class ExchangeWebServiceClass {
 	public static void main(String[] args) {		
+		Properties prop = new Properties();
 		try {
+			prop.load(new FileInputStream("Credentials.properties"));
+		    String Username = prop.getProperty("username");
+		    String Password = prop.getProperty("password");
+		    String ExchangeDomain = prop.getProperty("domain");
+		    String ExchangeURI = prop.getProperty("exchangeuri");
 			ExchangeService service = new ExchangeService();
-			URI url = new URI("https://24.185.27.191/EWS/exchange.asmx");
+//			URI url = new URI("https://24.185.27.191/EWS/exchange.asmx");
+			URI url = new URI(ExchangeURI);
 			service.setUrl(url);					
-			service.setCredentials( new WebCredentials( "Administrator", "Makesoft2", "MakesoftLab" ) );  //this works			
+			service.setCredentials( new WebCredentials(Username, Password, ExchangeDomain ) );  //this works			
 			System.out.println( "Created ExchangeService" );
 //			service.setTraceEnabled(true);
 			String[] names = {"alan.reid@makesoftlab.local","administrator@makesoftlab.local","aisha.bhari@makesoftlab.local","alannah.shaw@makesoftlab.local"};
